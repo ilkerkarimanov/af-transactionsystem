@@ -9,8 +9,8 @@ namespace AF.TransactionSystem.Presentation
     {
         public static async Task Main()
         {
-            int choice = -1;
-            while (choice != 5)
+            int choice;
+            while (true)
             {
                 Console.WriteLine("====================");
                 Console.WriteLine("0. Open Account\n");
@@ -18,7 +18,6 @@ namespace AF.TransactionSystem.Presentation
                 Console.WriteLine("2. Withdraw\n");
                 Console.WriteLine("3. Deposit\n");
                 Console.WriteLine("4. Transfer\n");
-                Console.WriteLine("5. Quit\n");
                 Console.WriteLine("====================");
 
                 Console.WriteLine("Enter your choice: ");
@@ -39,9 +38,6 @@ namespace AF.TransactionSystem.Presentation
                         break;
                     case 4:
                         await Transfer();
-                        break;
-                    case 5:
-                        Console.WriteLine("\n Ending");
                         break;
                 }
             }
@@ -89,6 +85,7 @@ namespace AF.TransactionSystem.Presentation
                 {
                     Console.WriteLine($"{ex.Message}");
                 }
+                await Main();
             }
         }
 
@@ -124,6 +121,7 @@ namespace AF.TransactionSystem.Presentation
                 {
                     Console.WriteLine($"{ex.Message}");
                 }
+                await Main();
             }
         }
 
@@ -163,6 +161,7 @@ namespace AF.TransactionSystem.Presentation
                 {
                     Console.WriteLine($"{ex.Message}");
                 }
+                await Main();
             }
         }
 
@@ -202,6 +201,7 @@ namespace AF.TransactionSystem.Presentation
                 {
                     Console.WriteLine($"{ex.Message}");
                 }
+                await Main();
             }
         }
 
@@ -244,6 +244,7 @@ namespace AF.TransactionSystem.Presentation
                 {
                     Console.WriteLine($"{ex.Message}");
                 }
+                await Main();
             }
         }
     }

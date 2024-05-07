@@ -18,7 +18,8 @@ namespace AF.TransactionSystem.Application
         {
             RuleFor(x => x.FromAccountNumber).NotEmpty();
             RuleFor(x => x.ToAccountNumber).NotEmpty();
-            RuleFor(x => x.Amount).Must(x => decimal.TryParse(x, out var number) && number > 0);
+            RuleFor(x => x.Amount).Must(x => decimal.TryParse(x, out var number) && number > 0)
+                .WithMessage("Amount must be valid positive number."); ;
         }
     }
 

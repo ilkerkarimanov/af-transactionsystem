@@ -19,7 +19,8 @@ namespace AF.TransactionSystem.Application
             RuleFor(x => x.AccountNumber).NotEmpty();
             RuleFor(x => x.FirstName).NotEmpty();
             RuleFor(x => x.LastName).NotEmpty();
-            RuleFor(x => x.OpeningBalance).Must(x => decimal.TryParse(x, out var number) && number > 0);
+            RuleFor(x => x.OpeningBalance).Must(x => decimal.TryParse(x, out var number) && number > 0)
+                .WithMessage("OpeningBalance must be valid positive number."); ;
         }
     }
 

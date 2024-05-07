@@ -15,7 +15,8 @@ namespace AF.TransactionSystem.Application
         public DepositCommandValidator()
         {
             RuleFor(x => x.AccountNumber).NotEmpty();
-            RuleFor(x => x.Amount).Must(x => decimal.TryParse(x, out var number) && number > 0);
+            RuleFor(x => x.Amount).Must(x => decimal.TryParse(x, out var number) && number > 0)
+                .WithMessage("Amount must be valid positive number.");
         }
     }
 
