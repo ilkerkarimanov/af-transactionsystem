@@ -1,7 +1,8 @@
 # af-transactionsystem
-Domain Driven Design example of ATM financial system
+Showcase presentation
 
-Hexagonial (Clean) Architecture sample
+- Domain Driven Design example of ATM financial system
+- Hexagonial (Clean) Architecture sample
 
 Rich Domain Model with:
 1. Ardalis.SharedKernel for base Entity, ValueObject and Identificator nomeclature
