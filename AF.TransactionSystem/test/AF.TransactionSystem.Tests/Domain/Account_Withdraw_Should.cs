@@ -25,7 +25,7 @@ namespace AF.TransactionSystem.Tests.Domain
                 Name.Create("robot", "robotkin")
                 );
             account.Deposit(new Money(1));
-            Assert.Throws<ArgumentException>(() => account.Withdraw(new Money(0)));
+            Assert.Throws<DebitOperationException>(() => account.Withdraw(new Money(0)));
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace AF.TransactionSystem.Tests.Domain
                 Name.Create("robot", "robotkin")
                 );
             account.Deposit(new Money(1));
-            Assert.Throws<ArgumentException>(() => account.Withdraw(new Money(0)));
+            Assert.Throws<DebitOperationException>(() => account.Withdraw(new Money(0)));
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace AF.TransactionSystem.Tests.Domain
                 Name.Create("robot", "robotkin")
                 );
             account.Deposit(new Money(1));
-            Assert.Throws<InvalidOperationException>(() => account.Withdraw(new Money(2)));
+            Assert.Throws<DebitOperationException>(() => account.Withdraw(new Money(2)));
         }
     }
 }

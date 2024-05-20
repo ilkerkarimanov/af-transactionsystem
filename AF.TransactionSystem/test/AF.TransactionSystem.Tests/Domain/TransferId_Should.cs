@@ -3,6 +3,7 @@ using Xunit;
 
 namespace AF.TransactionSystem.Tests.Domain
 {
+    /*
     public class TransferId_Should
     {
         [Fact]
@@ -18,4 +19,5 @@ namespace AF.TransactionSystem.Tests.Domain
             Assert.Throws<ArgumentException>(() => TransferId.Create(Guid.Empty));
         }
     }
+    */
 }

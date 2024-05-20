@@ -1,8 +1,9 @@
 ﻿using Ardalis.GuardClauses;
+using Ardalis.SharedKernel;
 
 namespace AF.TransactionSystem.Domain
 {
-    public record Name
+    public class Name : ValueObject
     {
         public string FirstName { get; init; }
         public string LastName { get; init; }
@@ -19,6 +20,12 @@ namespace AF.TransactionSystem.Domain
                 FirstName = firstName,
                 LastName = lastName
             };
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return FirstName;
+            yield return LastName;
         }
     }
 }

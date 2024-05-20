@@ -21,6 +21,7 @@ namespace AF.TransactionSystem
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
             services.AddValidatorsFromAssemblyContaining<Program>();
             services.AddSingleton<IAccountRepository, AccountStore>();
+            services.AddTransient<ITransferService, TransferService>();
 
             ServiceProvider =  services.BuildServiceProvider();
         }

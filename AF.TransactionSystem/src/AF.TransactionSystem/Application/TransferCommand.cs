@@ -28,14 +28,17 @@ namespace AF.TransactionSystem.Application
         private readonly IAccountRepository _accountRepository;
         private readonly IValidator<TransferCommand> _validator;
         private readonly ILogger<TransferCommandHandler> _logger;
+        private readonly ITransferService _transferService;
 
         public TransferCommandHandler(IAccountRepository accountRepository,
             IValidator<TransferCommand> validator,
-            ILogger<TransferCommandHandler> logger)
+            ILogger<TransferCommandHandler> logger,
+            ITransferService transferService)
         {
             _accountRepository = accountRepository;
             _validator = validator;
             _logger = logger;
+            _transferService = transferService;
         }
 
         public async Task Handle(TransferCommand request, CancellationToken cancellationToken)
@@ -60,9 +63,15 @@ namespace AF.TransactionSystem.Application
 
             var amount = new Money(decimal.Parse(request.Amount));
 
-            var transfer = fromAccount.TransferTo(toAccount, amount);
-
-            _logger.LogInformation($"Transfer has been done. \n Credit: {transfer.Credit.AccountId.Value}/{fromAccountNumber.Value}/{transfer.Credit.Amount.Amount} \n Debit: {transfer.Debit.AccountNumber.Value}/{toAccountNumber.Value}/{transfer.Debit.Amount.Amount}");
+            try
+            {
+                _transferService.Transfer(fromAccount, toAccount, amount);
+                throw new TransferOperationException($"Transfer has been done. \n Amount: {amount.Amount} \n Debit: {fromAccount.AccountNumber.Value}  \n Credit: {toAccount.AccountNumber.Value}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Transfer failed. Reason: \n {ex.Message}");
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ namespace AF.TransactionSystem.Tests.Domain
         public void ReturnsObject_When_AmountIsPositive()
         {
             var obj = Debit.Create(
-                AccountId.Create(Guid.NewGuid()),
+                new AccountId(),
                 new Money(1));
             Assert.IsType<Debit>(obj);
         }
@@ -18,7 +18,7 @@ namespace AF.TransactionSystem.Tests.Domain
         public void ThrowsException_When_AmountIsZero()
         {
             Assert.Throws<ArgumentException>(() => Debit.Create(
-                AccountId.Create(Guid.NewGuid()),
+                new AccountId(),
                 new Money(0)));
         }
 
@@ -26,7 +26,7 @@ namespace AF.TransactionSystem.Tests.Domain
         public void ThrowsException_When_AmountIsNegative()
         {
             Assert.Throws<ArgumentException>(() => Debit.Create(
-                AccountId.Create(Guid.NewGuid()),
+                new AccountId(),
                 new Money(-1)));
         }
     }

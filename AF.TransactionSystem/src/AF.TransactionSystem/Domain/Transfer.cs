@@ -1,20 +1,14 @@
-﻿
-using Ardalis.GuardClauses;
+﻿using Ardalis.SharedKernel;
 
 namespace AF.TransactionSystem.Domain
 {
-    public record TransferId
+    public readonly record struct TransferId
     {
         public Guid Value { get; init; }
-        private TransferId() { }
-        public static TransferId Create(Guid value)
-        {
-            Guard.Against.InvalidInput(value, nameof(Value), (x) => x != Guid.Empty);
-            return new TransferId() { Value = value };
-        }
+        public TransferId() { Value = Guid.NewGuid(); }
     }
 
-    public class Transfer : Entity<TransferId>
+    public class Transfer : EntityBase<TransferId>
     { 
         public Credit Credit { get; init; }
         public CreditId CreditId { get; private set; }
@@ -31,7 +25,7 @@ namespace AF.TransactionSystem.Domain
         {
             return new Transfer()
             {
-                Id = TransferId.Create(Guid.NewGuid()),
+                Id = new TransferId(),
                 Debit = debit,
                 DebitId = debit.Id,
                 Credit = credit,
@@ -39,5 +33,11 @@ namespace AF.TransactionSystem.Domain
                 CreatedDate = DateTime.UtcNow
             };
         }
+    }
+
+    public class TransferOperationException : Exception
+    {
+        public TransferOperationException(string message) : base(message) { }
+        public TransferOperationException(Exception ex) : base(ex.Message, ex) { }
     }
 }

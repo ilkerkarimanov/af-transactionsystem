@@ -1,8 +1,9 @@
 ﻿using Ardalis.GuardClauses;
+using Ardalis.SharedKernel;
 
 namespace AF.TransactionSystem.Domain
 {
-    public record AccountNumber
+    public class AccountNumber : ValueObject
     {
         public string Value { get; init; }
         private AccountNumber() { }
@@ -10,6 +11,11 @@ namespace AF.TransactionSystem.Domain
         {
             Guard.Against.NullOrEmpty(value, nameof(Value));
             return new AccountNumber() { Value = value };
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
         }
     }
 }

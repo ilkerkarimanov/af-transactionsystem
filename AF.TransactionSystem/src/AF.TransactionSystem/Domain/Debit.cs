@@ -1,19 +1,15 @@
 ﻿using Ardalis.GuardClauses;
+using Ardalis.SharedKernel;
 
 namespace AF.TransactionSystem.Domain
 {
-    public record DebitId
+    public readonly record struct DebitId
     {
         public Guid Value { get; init; }
-        private DebitId() { }
-        public static DebitId Create(Guid value) 
-        {
-            Guard.Against.InvalidInput(value, nameof(Value), (x) => x != Guid.Empty);
-            return new DebitId() { Value = value };
-        }
+        public DebitId() { }
     }
 
-    public class Debit : Entity<DebitId>
+    public class Debit : EntityBase<DebitId>
     {
         public AccountId AccountNumber { get; init; }
         public Money Amount { get; init; }
@@ -26,14 +22,18 @@ namespace AF.TransactionSystem.Domain
 
             return new Debit()
             {
-                Id = DebitId.Create(Guid.NewGuid()),
+                Id = new DebitId(),
                 AccountNumber = accountNumber,
                 Amount = amount,
                 CreatedDate = DateTime.UtcNow
             };
         }
+    }
 
-        public override bool Equals(object obj) => obj is Debit credit && Id == credit.Id;
-        public override int GetHashCode() => HashCode.Combine(Id);
+    public class DebitOperationException : Exception
+    {
+        public DebitOperationException(string accountNumber, decimal amount, string reason, Exception ex)
+            : base($"Debit operation didn't complete. AccountNumber: {accountNumber}, Amount: {amount}, Reason: {reason}")
+        { }
     }
 }

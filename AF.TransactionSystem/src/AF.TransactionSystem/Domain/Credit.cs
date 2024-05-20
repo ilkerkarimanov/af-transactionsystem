@@ -1,19 +1,15 @@
 ﻿using Ardalis.GuardClauses;
+using Ardalis.SharedKernel;
 
 namespace AF.TransactionSystem.Domain
 {
-    public record CreditId
+    public readonly record struct CreditId
     {
         public Guid Value { get; init; }
-        private CreditId() { }
-        public static CreditId Create(Guid value)
-        {
-            Guard.Against.InvalidInput(value, nameof(Value), (x) => x != Guid.Empty);
-            return new CreditId() { Value = value };
-        }
+        public CreditId() { Value = Guid.NewGuid(); }
     }
 
-    public class Credit: Entity<CreditId>
+    public class Credit: EntityBase<CreditId>
     {
         public AccountId AccountId { get; init; }
         public Money Amount { get; init; }
@@ -25,14 +21,18 @@ namespace AF.TransactionSystem.Domain
 
             return new Credit()
             {
-                Id = CreditId.Create(Guid.NewGuid()),
+                Id = new CreditId(),
                 AccountId = accountId,
                 Amount = amount,
                 CreatedDate = DateTime.UtcNow
             };
         }
+    }
 
-        public override bool Equals(object obj) => obj is Credit credit && Id == credit.Id;
-        public override int GetHashCode() => HashCode.Combine(Id);
+    public class CreditOperationException : Exception
+    {
+        public CreditOperationException(string accountNumber, decimal amount, string reason, Exception ex)
+            : base($"Credit operation didn't complete. AccountNumber: {accountNumber}, Amount: {amount}, Reason: {reason}", ex)
+        { }
     }
 }

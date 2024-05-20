@@ -25,6 +25,8 @@ namespace AF.TransactionSystem.Tests.Application
             var mockRepo = new Mock<IAccountRepository>();
             mockRepo.Setup(x => x.Find(fromAcc.AccountNumber)).ReturnsAsync(fromAcc).Verifiable();
             mockRepo.Setup(x => x.Find(toAcc.AccountNumber)).ReturnsAsync(toAcc).Verifiable();
+            var mockTransferService = new Mock<ITransferService>();
+            
 
             var validator = new TransferCommandValidator();
 
@@ -33,7 +35,8 @@ namespace AF.TransactionSystem.Tests.Application
             var handler = new TransferCommandHandler(
                 mockRepo.Object,
                 validator,
-                mockLogger.Object
+                mockLogger.Object,
+                mockTransferService.Object
                 );
 
             await handler.Handle(command, new CancellationToken());
@@ -58,6 +61,7 @@ namespace AF.TransactionSystem.Tests.Application
             var mockRepo = new Mock<IAccountRepository>();
             mockRepo.Setup(x => x.Find(fromAcc.AccountNumber)).ReturnsAsync(default(Account));
             mockRepo.Setup(x => x.Find(toAcc.AccountNumber)).ReturnsAsync(toAcc);
+            var mockTransferService = new Mock<ITransferService>();
 
             var validator = new TransferCommandValidator();
 
@@ -66,7 +70,8 @@ namespace AF.TransactionSystem.Tests.Application
             var handler = new TransferCommandHandler(
                 mockRepo.Object,
                 validator,
-                mockLogger.Object
+                mockLogger.Object,
+                mockTransferService.Object
                 );
 
             await Assert.ThrowsAsync<ArgumentNullException>(async () => await handler.Handle(command, new CancellationToken()));
@@ -89,6 +94,7 @@ namespace AF.TransactionSystem.Tests.Application
             var mockRepo = new Mock<IAccountRepository>();
             mockRepo.Setup(x => x.Find(fromAcc.AccountNumber)).ReturnsAsync(fromAcc);
             mockRepo.Setup(x => x.Find(toAcc.AccountNumber)).ReturnsAsync(default(Account));
+            var mockTransferService = new Mock<ITransferService>();
 
             var validator = new TransferCommandValidator();
 
@@ -97,7 +103,8 @@ namespace AF.TransactionSystem.Tests.Application
             var handler = new TransferCommandHandler(
                 mockRepo.Object,
                 validator,
-                mockLogger.Object
+                mockLogger.Object,
+                mockTransferService.Object
                 );
 
             await Assert.ThrowsAsync<ArgumentNullException>(async () => await handler.Handle(command, new CancellationToken()));

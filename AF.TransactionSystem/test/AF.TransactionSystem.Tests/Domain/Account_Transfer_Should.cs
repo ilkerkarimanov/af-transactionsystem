@@ -1,9 +1,9 @@
 ﻿using AF.TransactionSystem.Domain;
-using System.Security.Principal;
 using Xunit;
 
 namespace AF.TransactionSystem.Tests.Domain
 {
+
     public class Account_Transfer_Should
     {
         [Fact]
@@ -22,7 +22,8 @@ namespace AF.TransactionSystem.Tests.Domain
                 );
             toAcc.Deposit(new Money(1));
 
-            fromAcc.TransferTo(toAcc, new Money(1));
+            var transferService = new TransferService();
+            transferService.Transfer(fromAcc, toAcc, new Money(1));
 
             Assert.Equal(new Money(0), fromAcc.Availability());
             Assert.Equal(new Money(2), toAcc.Availability());
@@ -41,7 +42,8 @@ namespace AF.TransactionSystem.Tests.Domain
                 Name.Create("john", "doe")
                 );
 
-            Assert.Throws<ArgumentException>(() => fromAcc.TransferTo(toAcc, new Money(0)));
+            var transferService = new TransferService();
+            Assert.Throws<ArgumentException>(() => transferService.Transfer(fromAcc, toAcc, new Money(0)));
         }
 
         [Fact]
@@ -57,7 +59,8 @@ namespace AF.TransactionSystem.Tests.Domain
                 Name.Create("john", "doe")
                 );
 
-            Assert.Throws<ArgumentException>(() => fromAcc.TransferTo(toAcc, new Money(-1)));
+            var transferService = new TransferService();
+            Assert.Throws<ArgumentException>(() => transferService.Transfer(fromAcc, toAcc, new Money(-1)));
         }
 
         [Fact]
@@ -76,7 +79,8 @@ namespace AF.TransactionSystem.Tests.Domain
                 );
             toAcc.Deposit(new Money(1));
 
-            Assert.Throws<InvalidOperationException>(() => fromAcc.TransferTo(toAcc, new Money(2)));
+            var transferService = new TransferService();
+            Assert.Throws<TransferOperationException>(() => transferService.Transfer(fromAcc, toAcc, new Money(2)));
         }
 
         [Fact]
@@ -89,7 +93,8 @@ namespace AF.TransactionSystem.Tests.Domain
 
             fromAcc.Deposit(new Money(1));
 
-            Assert.Throws<ArgumentNullException>(() => fromAcc.TransferTo(null, new Money(1)));
+            var transferService = new TransferService();
+            Assert.Throws<ArgumentNullException>(() => transferService.Transfer(fromAcc, null, new Money(1)));
         }
 
         [Fact]
@@ -102,7 +107,9 @@ namespace AF.TransactionSystem.Tests.Domain
 
             fromAcc.Deposit(new Money(1));
 
-            Assert.Throws<InvalidOperationException>(() => fromAcc.TransferTo(fromAcc, new Money(1)));
+            var transferService = new TransferService();
+            Assert.Throws<TransferOperationException>(() => transferService.Transfer(fromAcc, fromAcc, new Money(1)));
         }
+
     }
 }

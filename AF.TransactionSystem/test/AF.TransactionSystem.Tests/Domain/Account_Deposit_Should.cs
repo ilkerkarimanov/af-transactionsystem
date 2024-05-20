@@ -25,7 +25,7 @@ namespace AF.TransactionSystem.Tests.Domain
                 Name.Create("robot", "robotkin")
                 );
             var amount = new Money(0);
-            Assert.Throws<ArgumentException>(() => account.Deposit(amount));
+            Assert.Throws<CreditOperationException>(() => account.Deposit(amount));
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace AF.TransactionSystem.Tests.Domain
                 Name.Create("robot", "robotkin")
                 );
             var amount = new Money(-1);
-            Assert.Throws<ArgumentException>(() => account.Deposit(amount));
+            Assert.Throws<CreditOperationException>(() => account.Deposit(amount));
         }
     }
 }
