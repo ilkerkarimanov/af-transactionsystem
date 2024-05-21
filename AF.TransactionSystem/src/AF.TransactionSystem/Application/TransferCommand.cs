@@ -41,12 +41,12 @@ namespace AF.TransactionSystem.Application
             _transferService = transferService;
         }
 
-        public async Task Handle(TransferCommand request, CancellationToken cancellationToken)
+        public Task Handle(TransferCommand request, CancellationToken cancellationToken)
         {
             _validator.ValidateAndThrow(request);
 
             var fromAccountNumber = AccountNumber.Create(request.FromAccountNumber);
-            var fromAccount = await _accountRepository.Find(fromAccountNumber);
+            var fromAccount = _accountRepository.Find(fromAccountNumber).Result;
 
             if (fromAccount is null)
             {
@@ -54,7 +54,7 @@ namespace AF.TransactionSystem.Application
             }
 
             var toAccountNumber = AccountNumber.Create(request.ToAccountNumber);
-            var toAccount = await _accountRepository.Find(toAccountNumber);
+            var toAccount = _accountRepository.Find(toAccountNumber).Result;
 
             if (toAccount is null)
             {
@@ -65,13 +65,18 @@ namespace AF.TransactionSystem.Application
 
             try
             {
-                _transferService.Transfer(fromAccount, toAccount, amount);
-                throw new TransferOperationException($"Transfer has been done. \n Amount: {amount.Amount} \n Debit: {fromAccount.AccountNumber.Value}  \n Credit: {toAccount.AccountNumber.Value}");
+                var transfer = _transferService.Transfer(fromAccount, toAccount, amount);
+                _accountRepository.Add(transfer);
+                _accountRepository.SaveChanges();
+
+                _logger.LogInformation($"Transfer has been done. \n Amount: {amount.Amount} \n Debit: {fromAccount.AccountNumber.Value}  \n Credit: {toAccount.AccountNumber.Value}");
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Transfer failed. Reason: \n {ex.Message}");
             }
+
+            return Task.CompletedTask;
         }
     }
 }

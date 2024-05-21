@@ -1,6 +1,7 @@
 ﻿using AF.TransactionSystem.Domain;
 using AF.TransactionSystem.Infrastructure;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -18,9 +19,12 @@ namespace AF.TransactionSystem
             {
                 configure.AddConsole();
             });
+            services
+            .AddDbContext<TransactionSystemDbContext>(
+                options => options.UseInMemoryDatabase("TransactionSystemDB"), ServiceLifetime.Transient);
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
             services.AddValidatorsFromAssemblyContaining<Program>();
-            services.AddSingleton<IAccountRepository, AccountStore>();
+            services.AddSingleton<IAccountRepository, AccountRepository>();
             services.AddTransient<ITransferService, TransferService>();
 
             ServiceProvider =  services.BuildServiceProvider();

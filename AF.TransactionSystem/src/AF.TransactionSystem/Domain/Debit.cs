@@ -6,12 +6,17 @@ namespace AF.TransactionSystem.Domain
     public readonly record struct DebitId
     {
         public Guid Value { get; init; }
-        public DebitId() { }
+        public DebitId() { Value = Guid.NewGuid(); }
+
+        public DebitId(Guid value)
+        {
+            Value = value;
+        }
     }
 
     public class Debit : EntityBase<DebitId>
     {
-        public AccountId AccountNumber { get; init; }
+        public AccountId AccountId { get; init; }
         public Money Amount { get; init; }
         public DateTime CreatedDate { get; init; }
         private Debit() { }
@@ -23,7 +28,7 @@ namespace AF.TransactionSystem.Domain
             return new Debit()
             {
                 Id = new DebitId(),
-                AccountNumber = accountNumber,
+                AccountId = accountNumber,
                 Amount = amount,
                 CreatedDate = DateTime.UtcNow
             };

@@ -7,6 +7,11 @@ namespace AF.TransactionSystem.Domain
     {
         public Guid Value { get; init; }
         public CreditId() { Value = Guid.NewGuid(); }
+
+        public CreditId(Guid value)
+        {
+            Value = value;
+        }
     }
 
     public class Credit: EntityBase<CreditId>

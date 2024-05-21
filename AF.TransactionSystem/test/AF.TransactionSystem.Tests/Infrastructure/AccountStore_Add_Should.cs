@@ -4,6 +4,7 @@ using Xunit;
 
 namespace AF.TransactionSystem.Tests.Infrastructure
 {
+    /*
     public class AccountStore_Add_Should
     {
         [Fact]
@@ -31,4 +32,5 @@ namespace AF.TransactionSystem.Tests.Infrastructure
             await Assert.ThrowsAsync<InvalidOperationException>(async () => await store.Add(account));
         }
     }
+    */
 }

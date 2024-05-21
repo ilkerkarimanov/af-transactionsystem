@@ -6,6 +6,11 @@ namespace AF.TransactionSystem.Domain
     {
         public Guid Value { get; init; }
         public TransferId() { Value = Guid.NewGuid(); }
+
+        public TransferId(Guid value)
+        {
+            Value = value;
+        }
     }
 
     public class Transfer : EntityBase<TransferId>
@@ -38,6 +43,6 @@ namespace AF.TransactionSystem.Domain
     public class TransferOperationException : Exception
     {
         public TransferOperationException(string message) : base(message) { }
-        public TransferOperationException(Exception ex) : base(ex.Message, ex) { }
+        public TransferOperationException(string message, Exception ex) : base(message, ex) { }
     }
 }

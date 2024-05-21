@@ -40,7 +40,7 @@ namespace AF.TransactionSystem.Application
             _logger = logger;
         }
 
-        public async Task Handle(OpenAccountCommand request, CancellationToken cancellationToken)
+        public Task Handle(OpenAccountCommand request, CancellationToken cancellationToken)
         {
             Console.WriteLine(request.AccountNumber);
             _validator.ValidateAndThrow(request);
@@ -49,12 +49,16 @@ namespace AF.TransactionSystem.Application
 
             var name = Name.Create(request.FirstName, request.LastName);
             var account = Account.Create(accountNumber, name);
-            await _accountRepository.Add(account);
+            _accountRepository.Add(account);
 
             var openingAmount = new Money(decimal.Parse(request.OpeningBalance));
-            account.Deposit(openingAmount);
+            var credit = account.Deposit(openingAmount);
+            _accountRepository.Add(credit);
+            _accountRepository.SaveChanges();
 
             _logger.LogInformation($"Open account has been done. AccountNumber {accountNumber.Value}");
+
+            return Task.CompletedTask;
         }
     }
 }

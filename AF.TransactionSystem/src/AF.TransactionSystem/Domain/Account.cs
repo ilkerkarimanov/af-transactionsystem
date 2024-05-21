@@ -7,6 +7,7 @@ namespace AF.TransactionSystem.Domain
     {
         public Guid Value { get; init; }
         public AccountId() { Value = Guid.NewGuid(); }
+        public AccountId(Guid value) {  Value = value; }
     }
 
     public class Account : EntityBase<AccountId>
@@ -14,9 +15,9 @@ namespace AF.TransactionSystem.Domain
         public Name Name { get; init; }
         public AccountNumber AccountNumber { get; init; }
 
-        private readonly HashSet<Debit> _debits = new HashSet<Debit>();
+        private readonly List<Debit> _debits = new();
         public IReadOnlyList<Debit> Debits => _debits.ToList();
-        private HashSet<Credit> _credits = new HashSet<Credit>();
+        private readonly List<Credit> _credits = new();
         public IReadOnlyList<Credit> Credits => _credits.ToList();
 
         private object _transactionLock = new object();

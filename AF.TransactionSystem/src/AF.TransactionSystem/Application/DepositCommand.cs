@@ -36,12 +36,12 @@ namespace AF.TransactionSystem.Application
             _logger = logger;
         }
 
-        public async Task Handle(DepositCommand request, CancellationToken cancellationToken)
+        public Task Handle(DepositCommand request, CancellationToken cancellationToken)
         {
             _validator.ValidateAndThrow(request);
 
             var accountNumber = AccountNumber.Create(request.AccountNumber);
-            var account = await _accountRepository.Find(accountNumber);
+            var account = _accountRepository.Find(accountNumber).Result;
 
             if(account is null)
             {
@@ -51,7 +51,12 @@ namespace AF.TransactionSystem.Application
             var depositAmount = new Money(decimal.Parse(request.Amount));
             var credit = account.Deposit(depositAmount);
 
+            _accountRepository.Add(credit);
+            _accountRepository.SaveChanges();
+
             _logger.LogInformation($"Deposit has been done. AccountNumber {credit.AccountId.Value}, Amount: {credit.Amount.Amount}");
+
+            return Task.CompletedTask;
         }
     }
 }

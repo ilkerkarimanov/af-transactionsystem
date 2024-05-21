@@ -36,12 +36,12 @@ namespace AF.TransactionSystem.Application
             _logger = logger;
         }
 
-        public async Task Handle(WithdrawCommand request, CancellationToken cancellationToken)
+        public Task Handle(WithdrawCommand request, CancellationToken cancellationToken)
         {
             _validator.ValidateAndThrow(request);
 
             var accountNumber = AccountNumber.Create(request.AccountNumber);
-            var account = await _accountRepository.Find(accountNumber);
+            var account = _accountRepository.Find(accountNumber).Result;
 
             if(account is null)
             {
@@ -50,8 +50,12 @@ namespace AF.TransactionSystem.Application
 
             var amount = new Money(decimal.Parse(request.Amount));
             var debit = account.Withdraw(amount);
+            _accountRepository.Add(debit);
+            _accountRepository.SaveChanges();
 
-            _logger.LogInformation($"Debit has been done. AccountNumber {debit.AccountNumber.Value}, Amount: {debit.Amount.Amount}");
+            _logger.LogInformation($"Debit has been done. AccountNumber {debit.AccountId.Value}, Amount: {debit.Amount.Amount}");
+
+            return Task.CompletedTask;
         }
     }
 }
