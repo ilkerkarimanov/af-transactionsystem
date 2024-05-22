@@ -31,13 +31,14 @@ namespace AF.TransactionSystem.Domain
             }
             catch (CreditOperationException creditEx)
             {
-                throw new TransferOperationException($"Transfer cannot be processed, because credit failed. \n Amount: {amount.Amount} \n Debit: {fromAccount.AccountNumber.Value}  \n Credit: {toAccount.AccountNumber.Value}", creditEx);
+                throw new TransferOperationException($"Transfer cannot be processed, because credit failed. \n Amount: {amount.Amount} \n Debit: {toAccount.AccountNumber.Value}  \n Credit: {fromAccount.AccountNumber.Value}", creditEx);
 
             }
             catch (DebitOperationException debitEx)
             {
                 fromAccount.Deposit(amount);
-                throw new TransferOperationException($"Transfer cannot be processed, because debit failed. \n Amount: {amount.Amount} \n Debit: {fromAccount.AccountNumber.Value}  \n Credit: {toAccount.AccountNumber.Value} Reverse credit was issued to account {fromAccount.AccountNumber.Value}. \\n Amount: {amount.Amount}\"", debitEx);
+                throw new TransferOperationException($"Transfer cannot be processed, because debit failed. \n Amount: {amount.Amount} \n Debit: {toAccount.AccountNumber.Value}  \n Credit: {fromAccount.AccountNumber.Value}." +
+                    $" \n Reverse credit was issued to account {fromAccount.AccountNumber.Value}.", debitEx);
             }
         }
     }
