@@ -1,12 +1,18 @@
 # af-transactionsystem
-Showcase presentation
+DDD Showcase presentation
 
 - Domain Driven Design example of ATM financial system
-- Hexagonial (Clean) Architecture sample
+- Hexagonal (Clean) Architecture sample
 
 Rich Domain Model with:
-1. Ardalis.SharedKernel for base Entity, ValueObject and Identificator nomeclature
+1. Ardalis.SharedKernel for base Entity, ValueObject, and Identification nomenclature
 2. Ardalis.GuardClause for invariant strengthening of the core domain composition
+
+Persistence with:
+1. EF Core Fluent Configuration for relation model mapping
+2. Repository and Unit of Work with DbContext interface
+   
+Test coverage with xUnit.
 
 Business rules and boundary context
 1. Create an Account
