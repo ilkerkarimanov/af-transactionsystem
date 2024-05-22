@@ -4,34 +4,34 @@ using Xunit;
 
 namespace AF.TransactionSystem.Tests.Infrastructure
 {
-    /*
-    public class AccountStore_Should
+
+    public class AccountStore_Find_Should : EfCoreTestBase
     {
         [Fact]
-        public async Task Completes_When_FindExistingAccount()
+        public void Completes_When_FindExistingAccount()
         {
-            IAccountRepository store = new AccountStore();
+            IAccountRepository store = new AccountRepository(_dbContext);
             var account = Account.Create(
                 AccountNumber.Create("rr1"),
                 Name.Create("robot", "robotkin")
                 );
 
-            await store.Add(account);
+            store.Add(account);
+            store.SaveChanges();
 
-            var result = await store.Find(account.AccountNumber);
+            var result = store.Find(account.AccountNumber).Result;
             Assert.Equal(account.Id, result.Id);
             Assert.Equal(account.AccountNumber, result.AccountNumber);
             Assert.Equal(account.Name, result.Name);
         }
 
         [Fact]
-        public async Task Throws_When_FindsNonExistingAccount()
+        public void Throws_When_FindsNonExistingAccount()
         {
-            IAccountRepository store = new AccountStore();
+            IAccountRepository store = new AccountRepository(_dbContext);
             var accountNumber = AccountNumber.Create("rr1");
 
-            await Assert.ThrowsAsync<InvalidOperationException>(async () => await store.Find(accountNumber));
+            Assert.Throws<ArgumentException>(() => store.Find(accountNumber).RunSynchronously());
         }
     }
-    */
 }

@@ -1,4 +1,5 @@
-﻿using Ardalis.SharedKernel;
+﻿using Ardalis.GuardClauses;
+using Ardalis.SharedKernel;
 
 namespace AF.TransactionSystem.Domain
 {
@@ -9,6 +10,7 @@ namespace AF.TransactionSystem.Domain
 
         public TransferId(Guid value)
         {
+            Guard.Against.InvalidInput(value, nameof(Value), (x) => x != Guid.Empty);
             Value = value;
         }
     }

@@ -4,33 +4,33 @@ using Xunit;
 
 namespace AF.TransactionSystem.Tests.Infrastructure
 {
-    /*
-    public class AccountStore_Add_Should
+    public class AccountStore_Add_Should : EfCoreTestBase
     {
         [Fact]
         public void Completes_When_OnAddAccountOnce()
         {
-            IAccountRepository store = new AccountStore();
+            IAccountRepository store = new AccountRepository(_dbContext);
             var account = Account.Create(
                 AccountNumber.Create("rr1"),
                 Name.Create("robot", "robotkin")
                 );
 
             store.Add(account);
+            store.SaveChanges();
         }
 
         [Fact]
-        public async Task Throws_When_OnAddAccountTwoTimes()
+        public void Throws_When_OnAddAccountTwoTimes()
         {
-            IAccountRepository store = new AccountStore();
+            IAccountRepository store = new AccountRepository(_dbContext);
             var account = Account.Create(
-                AccountNumber.Create("rr1"),
-                Name.Create("robot", "robotkin")
-                );
-            await store.Add(account);
+            AccountNumber.Create("rr1"),
+            Name.Create("robot", "robotkin")
+            );
+            store.Add(account);
+            store.SaveChanges();
 
-            await Assert.ThrowsAsync<InvalidOperationException>(async () => await store.Add(account));
+            Assert.Throws<ArgumentException>(() => store.Add(account).RunSynchronously());
         }
     }
-    */
 }

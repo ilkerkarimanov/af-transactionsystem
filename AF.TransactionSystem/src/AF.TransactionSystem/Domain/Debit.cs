@@ -10,6 +10,7 @@ namespace AF.TransactionSystem.Domain
 
         public DebitId(Guid value)
         {
+            Guard.Against.InvalidInput(value, nameof(Value), (x) => x != Guid.Empty);
             Value = value;
         }
     }

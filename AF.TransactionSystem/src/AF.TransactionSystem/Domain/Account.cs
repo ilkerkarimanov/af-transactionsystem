@@ -7,7 +7,10 @@ namespace AF.TransactionSystem.Domain
     {
         public Guid Value { get; init; }
         public AccountId() { Value = Guid.NewGuid(); }
-        public AccountId(Guid value) {  Value = value; }
+        public AccountId(Guid value) {
+            Guard.Against.InvalidInput(value, nameof(value), (x) => x != Guid.Empty);
+            Value = value;
+        }
     }
 
     public class Account : EntityBase<AccountId>
