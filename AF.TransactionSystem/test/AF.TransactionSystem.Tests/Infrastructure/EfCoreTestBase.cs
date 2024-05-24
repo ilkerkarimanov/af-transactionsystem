@@ -20,7 +20,10 @@ namespace AF.TransactionSystem.Tests.Infrastructure
 
         public void Dispose()
         {
-            _dbContext.Dispose();
+            if( _dbContext != null )
+            {
+                _dbContext.Dispose();
+            }
         }
     }
 }
