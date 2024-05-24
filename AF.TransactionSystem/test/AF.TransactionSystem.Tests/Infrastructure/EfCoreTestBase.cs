@@ -10,7 +10,7 @@ namespace AF.TransactionSystem.Tests.Infrastructure
         protected EfCoreTestBase()
         {
             var _contextOptions = new DbContextOptionsBuilder<TransactionSystemDbContext>()
-                .UseInMemoryDatabase("TransactionSystemDbContextTest").Options;
+                .UseInMemoryDatabase($"TransactionSystemDbContext{Guid.NewGuid()}").Options;
 
             _dbContext = new TransactionSystemDbContext(_contextOptions);
 

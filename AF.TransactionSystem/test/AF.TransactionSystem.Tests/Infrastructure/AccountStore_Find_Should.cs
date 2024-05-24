@@ -20,6 +20,8 @@ namespace AF.TransactionSystem.Tests.Infrastructure
             store.SaveChanges();
 
             var result = store.Find(account.AccountNumber).Result;
+
+            Assert.Equal(1, _dbContext.Accounts.Count());
             Assert.Equal(account.Id, result.Id);
             Assert.Equal(account.AccountNumber, result.AccountNumber);
             Assert.Equal(account.Name, result.Name);
